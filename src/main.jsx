@@ -4,6 +4,10 @@ import './index.css'
 import App from './App.jsx'
 import { Provider } from 'react-redux'
 import { store } from './store'
+import { validateEnv } from './config/env'
+
+// Validate environment variables on startup
+validateEnv()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
