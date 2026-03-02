@@ -1,9 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-
-// A simple placeholder reducer to fulfill the requirements until actual features are added
-const rootReducer = (state = {}) => {
-  return state;
-};
+import rootReducer from './rootReducer';
 
 export const store = configureStore({
   reducer: rootReducer,
