@@ -5,14 +5,17 @@ import App from './App.jsx'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import { validateEnv } from './config/env'
+import ErrorBoundary from './components/common/ErrorBoundary'
 
 // Validate environment variables on startup
 validateEnv()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ErrorBoundary>
   </StrictMode>,
 )

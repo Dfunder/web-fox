@@ -14,6 +14,9 @@ import CreateCampaign from '../pages/CreateCampaign';
 import Admin from '../pages/Admin';
 import NotFound from '../pages/NotFound';
 
+// Test Component
+import ErrorTest from '../components/common/ErrorTest';
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -27,6 +30,7 @@ const AppRouter = () => {
           <Route path="campaign/:id" element={<CampaignDetails />} />
           <Route path="create" element={<CreateCampaign />} />
           <Route path="admin" element={<Admin />} />
+          <Route path="test-error" element={<ErrorTest />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

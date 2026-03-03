@@ -5,6 +5,7 @@ import donationsReducer from '../features/donations/donationsSlice';
 import dashboardReducer from '../features/dashboard/dashboardSlice';
 import adminReducer from '../features/admin/adminSlice';
 import bookmarksReducer from '../features/bookmarks/bookmarksSlice';
+import errorReducer from './errorSlice';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     dashboard: dashboardReducer,
     admin: adminReducer,
     bookmarks: bookmarksReducer,
+    error: errorReducer,
 });
 
 export default rootReducer;

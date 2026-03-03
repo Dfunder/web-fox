@@ -1,11 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toastSuccess, toastError } from '../../utils/toast';
 
 export const fetchCampaigns = createAsyncThunk(
     'campaigns/fetchAll',
     async (_, { rejectWithValue }) => {
         try {
-            // Async logic placeholder
+            toastSuccess('Campaigns loaded');
         } catch (error) {
+            toastError(error);
             return rejectWithValue(error.message);
         }
     }
