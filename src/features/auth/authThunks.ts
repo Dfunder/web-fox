@@ -80,6 +80,20 @@ export const verifyEmail = createAsyncThunk<any, string, { rejectValue: RejectVa
     }
 );
 
+export const resendEmailVerification = createAsyncThunk<any, string, { rejectValue: RejectValue }>(
+    'auth/resendEmailVerification',
+    async (email, { rejectWithValue }) => {
+        try {
+            const response = await api.post('/auth/resend-verification', { email });
+            toastSuccess('Verification email sent');
+            return response.data;
+        } catch (err: any) {
+            toastError(err);
+            return rejectWithValue(err.response?.data || err.message);
+        }
+    }
+);
+
 export const forgotPassword = createAsyncThunk<any, string, { rejectValue: RejectValue }>(
     'auth/forgotPassword',
     async (email) => {

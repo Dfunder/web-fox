@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { logoutUser } from './authThunks';
+import { registerUser, loginUser, logoutUser, verifyEmail, resendEmailVerification, forgotPassword } from './authThunks';
 
 const initialState = {
     user: null,
@@ -37,6 +37,32 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(registerUser.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(registerUser.fulfilled, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            .addCase(loginUser.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(loginUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+                state.isAuthenticated = true;
+                state.error = null;
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
             .addCase(logoutUser.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
@@ -55,6 +81,41 @@ const authSlice = createSlice({
                 state.user = null;
                 state.token = null;
                 state.isAuthenticated = false;
+            })
+            .addCase(verifyEmail.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(verifyEmail.fulfilled, (state) => {
+                state.isLoading = false;
+                state.error = null;
+            })
+            .addCase(verifyEmail.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            .addCase(resendEmailVerification.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(resendEmailVerification.fulfilled, (state) => {
+                state.isLoading = false;
+                state.error = null;
+            })
+            .addCase(resendEmailVerification.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            .addCase(forgotPassword.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(forgotPassword.fulfilled, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
             });
     },
 });

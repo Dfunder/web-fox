@@ -7,18 +7,19 @@ import Spinner from '../components/common/Spinner';
 import NotFound from '../pages/NotFound';
 import ErrorTest from '../components/common/ErrorTest';
 
-// Auth pages — small, kept as static imports
+// Auth pages
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
+import VerifyEmailPage from '../pages/auth/VerifyEmailPage';
 
-// Main pages — lazy-loaded for code splitting
-const Home            = lazy(() => import('../pages/Home'));
-const Explore         = lazy(() => import('../pages/Explore'));
+// Lazy-loaded pages
+const Home = lazy(() => import('../pages/Home'));
+const Explore = lazy(() => import('../pages/Explore'));
 const CampaignDetails = lazy(() => import('../pages/CampaignDetails'));
-const CreateCampaign  = lazy(() => import('../pages/CreateCampaign'));
-const Dashboard       = lazy(() => import('../pages/Dashboard'));
-const Admin           = lazy(() => import('../pages/Admin'));
+const CreateCampaign = lazy(() => import('../pages/CreateCampaign'));
+const Dashboard = lazy(() => import('../pages/Dashboard'));
+const Admin = lazy(() => import('../pages/Admin'));
 
 const SuspenseFallback = () => (
   <div className="flex min-h-screen items-center justify-center">
@@ -32,29 +33,29 @@ const AppRouter = () => {
       <GlobalLoadingWrapper>
         <Suspense fallback={<SuspenseFallback />}>
           <Routes>
-            {/* Every route lives inside MainLayout — Navbar + Footer always present */}
+
+            {/* Public pages with Navbar + Footer */}
             <Route element={<MainLayout />}>
-
-              {/* Auth & utility pages */}
-              <Route path="register"        element={<Register />} />
-              <Route path="login"           element={<Login />} />
-              <Route path="forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="admin"           element={<Admin />} />
-              <Route path="dashboard"       element={<Dashboard />} />
-
-              {/* Main public pages */}
-              <Route path="/">
-                <Route index                    element={<Home />} />
-                <Route path="explore"           element={<Explore />} />
-                <Route path="campaign/:id"      element={<CampaignDetails />} />
-                <Route path="create"            element={<CreateCampaign />} />
-                <Route path="test-error"        element={<ErrorTest />} />
-              </Route>
-
-              {/* 404 — also gets Navbar + Footer */}
-              <Route path="*" element={<NotFound />} />
-
+              <Route index element={<Home />} />
+              <Route path="explore" element={<Explore />} />
+              <Route path="campaign/:id" element={<CampaignDetails />} />
+              <Route path="create" element={<CreateCampaign />} />
+              <Route path="test-error" element={<ErrorTest />} />
             </Route>
+
+            {/* Auth pages (no layout if desired) */}
+            <Route path="register" element={<Register />} />
+            <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="verify-email/:token" element={<VerifyEmailPage />} />
+
+            {/* App pages */}
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="admin" element={<Admin />} />
+
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+
           </Routes>
         </Suspense>
       </GlobalLoadingWrapper>
