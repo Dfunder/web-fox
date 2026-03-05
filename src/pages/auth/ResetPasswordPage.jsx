@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
@@ -19,7 +19,7 @@ const ResetPasswordPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isExpired, setIsExpired] = useState(false);
+  const [isExpired, setIsExpired] = useState(!token);
 
   const {
     control,
@@ -34,13 +34,6 @@ const ResetPasswordPage = () => {
       token: token || "",
     },
   });
-
-  // Validate token exists
-  useEffect(() => {
-    if (!token) {
-      setIsExpired(true);
-    }
-  }, [token]);
 
   const handleResetPassword = async (data) => {
     try {
