@@ -1,8 +1,10 @@
+import React from 'react';
+import HeroSection from '../components/HeroSection';
+
 const Home = () => {
   return (
     <div>
-      <h1>Welcome to StellarAid</h1>
-      <p>Empowering communities through transparent blockchain crowdfunding.</p>
+      <HeroSection />
     </div>
   );
 };
