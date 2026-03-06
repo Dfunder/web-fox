@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectCurrentUser } from '../../features/auth/authSelectors';
 import { logoutUser } from '../../features/auth/authThunks';
 import { toastSuccess } from '../../utils/toast';
+import { useRole } from '../../hooks/useRole';
 
 const NAV_LINKS = [
   { label: 'How it works', to: '/how-it-works' },
@@ -24,6 +25,7 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector(selectCurrentUser);
+  const { isAdmin } = useRole();
 
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
@@ -365,6 +367,12 @@ export default function Navbar() {
                     <div className="sna-dropdown-name">{user.name}</div>
                     <div className="sna-dd-divider" />
                     <Link to="/dashboard" role="menuitem" onClick={() => setAvatarOpen(false)}>Dashboard</Link>
+                    {isAdmin && (
+                      <Link to="/admin" role="menuitem" onClick={() => setAvatarOpen(false)}>Admin Panel</Link>
+                    )}
+                    {!isAdmin && (
+                      <Link to="/create" role="menuitem" onClick={() => setAvatarOpen(false)}>Create Campaign</Link>
+                    )}
                     <Link to="/profile"   role="menuitem" onClick={() => setAvatarOpen(false)}>Profile</Link>
                     <Link to="/settings"  role="menuitem" onClick={() => setAvatarOpen(false)}>Settings</Link>
                     <div className="sna-dd-divider" />
@@ -417,6 +425,12 @@ export default function Navbar() {
           {user ? (
             <>
               <Link to="/dashboard" onClick={handleNavClick}>Dashboard</Link>
+              {isAdmin && (
+                <Link to="/admin" onClick={handleNavClick}>Admin Panel</Link>
+              )}
+              {!isAdmin && (
+                <Link to="/create" onClick={handleNavClick}>Create Campaign</Link>
+              )}
               <Link to="/profile"   onClick={handleNavClick}>Profile</Link>
               <Link to="/settings"  onClick={handleNavClick}>Settings</Link>
               <div className="sna-mobile-divider" />

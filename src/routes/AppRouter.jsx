@@ -6,6 +6,7 @@ import GlobalLoadingWrapper from '../components/common/GlobalLoadingWrapper';
 import Spinner from '../components/common/Spinner';
 import NotFound from '../pages/NotFound';
 import ErrorTest from '../components/common/ErrorTest';
+import AdminRoute from './AdminRoute';
 
 // Auth pages
 import Login from '../pages/Login';
@@ -51,7 +52,11 @@ const AppRouter = () => {
 
             {/* App pages */}
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="admin" element={<Admin />} />
+            <Route path="admin" element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
+            } />
 
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
