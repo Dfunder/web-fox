@@ -11,6 +11,9 @@ import { PersistGate } from "redux-persist/integration/react";
 // Validate environment variables on startup
 validateEnv();
 
+// Set global store reference for API service to avoid circular dependencies
+window.__REDUX_STORE__ = store;
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>

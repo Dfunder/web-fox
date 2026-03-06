@@ -25,6 +25,3 @@ export const store = configureStore({
 
 // persistor is exported so PersistGate in main.jsx can use it
 export const persistor = persistStore(store);
-
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;

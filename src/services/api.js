@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { store } from '../store';
-import { clearCredentials } from '../features/auth/authSlice';
 
 // Create configured Axios instance
 const api = axios.create({
@@ -14,8 +12,9 @@ const api = axios.create({
 // Request interceptor to attach JWT token
 api.interceptors.request.use(
   (config) => {
-    const state = store.getState();
-    const token = state.auth.token;
+    // Get token from localStorage directly to avoid circular dependency
+    const state = window.__REDUX_STORE__?.getState?.();
+    const token = state?.auth?.token;
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -36,7 +35,8 @@ api.interceptors.response.use(
   (error) => {
     // Handle 401 Unauthorized - logout user
     if (error.response?.status === 401) {
-      store.dispatch(clearCredentials());
+      // Dispatch clearCredentials through global store reference
+      window.__REDUX_STORE__?.dispatch({ type: 'auth/clearCredentials' });
       // You might want to redirect to login page here
       // window.location.href = '/login';
     }
