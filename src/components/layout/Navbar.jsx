@@ -1,13 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-
-// ─── Replace with your real auth hook / context ───────────────────────────────
-// e.g.  import { useAuth } from '../../contexts/AuthContext';
-const useAuth = () => ({
-  user: null,          // set to a user object when logged in, e.g. { name: 'Alice', avatarUrl: null }
-  logout: () => {},
-});
-// ─────────────────────────────────────────────────────────────────────────────
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectCurrentUser } from '../../features/auth/authSelectors';
+import { logoutUser } from '../../features/auth/authThunks';
+import { toastSuccess } from '../../utils/toast';
 
 const NAV_LINKS = [
   { label: 'How it works', to: '/how-it-works' },
@@ -25,11 +21,13 @@ function initials(name = '') {
 }
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const user = useAppSelector(selectCurrentUser);
 
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const avatarRef = useRef(null);
 
   /* close avatar dropdown on outside click */
@@ -46,10 +44,24 @@ export default function Navbar() {
   /* close mobile menu on route change */
   const handleNavClick = () => setMenuOpen(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setAvatarOpen(false);
-    logout();
-    navigate('/');
+    setIsLoggingOut(true);
+    try {
+      // Dispatch logoutUser thunk which calls POST /api/auth/logout
+      await dispatch(logoutUser()).unwrap();
+      // Show success toast
+      toastSuccess('You have been logged out.');
+      // Redirect to login
+      navigate('/login');
+    } catch {
+      // Even if logout fails on the backend, clear local state and redirect
+      // This ensures user can't access protected routes if disconnected
+      toastSuccess('You have been logged out.');
+      navigate('/login');
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -356,8 +368,14 @@ export default function Navbar() {
                     <Link to="/profile"   role="menuitem" onClick={() => setAvatarOpen(false)}>Profile</Link>
                     <Link to="/settings"  role="menuitem" onClick={() => setAvatarOpen(false)}>Settings</Link>
                     <div className="sna-dd-divider" />
-                    <button className="sna-dd-item sna-dd-logout" role="menuitem" onClick={handleLogout}>
-                      Sign out
+                    <button 
+                      className="sna-dd-item sna-dd-logout" 
+                      role="menuitem" 
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                      style={{ opacity: isLoggingOut ? 0.6 : 1, cursor: isLoggingOut ? 'not-allowed' : 'pointer' }}
+                    >
+                      {isLoggingOut ? 'Signing out...' : 'Sign out'}
                     </button>
                   </div>
                 )}
@@ -402,8 +420,13 @@ export default function Navbar() {
               <Link to="/profile"   onClick={handleNavClick}>Profile</Link>
               <Link to="/settings"  onClick={handleNavClick}>Settings</Link>
               <div className="sna-mobile-divider" />
-              <button className="sna-btn-ghost" style={{ textAlign:'left', color:'#ef4444' }} onClick={handleLogout}>
-                Sign out
+              <button 
+                className="sna-btn-ghost" 
+                style={{ textAlign:'left', color:'#ef4444', opacity: isLoggingOut ? 0.6 : 1, cursor: isLoggingOut ? 'not-allowed' : 'pointer' }} 
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+              >
+                {isLoggingOut ? 'Signing out...' : 'Sign out'}
               </button>
             </>
           ) : (

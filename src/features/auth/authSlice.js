@@ -65,6 +65,7 @@ const authSlice = createSlice({
             })
             .addCase(logoutUser.pending, (state) => {
                 state.isLoading = true;
+                state.error = null;
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.user = null;
@@ -75,7 +76,11 @@ const authSlice = createSlice({
             })
             .addCase(logoutUser.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.payload;
+                state.error = action.payload?.message || 'Logout failed';
+                // Still clear credentials on error to ensure user is logged out locally
+                state.user = null;
+                state.token = null;
+                state.isAuthenticated = false;
             })
             .addCase(verifyEmail.pending, (state) => {
                 state.isLoading = true;
