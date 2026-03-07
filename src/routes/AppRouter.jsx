@@ -7,6 +7,7 @@ import Spinner from '../components/common/Spinner';
 import NotFound from '../pages/NotFound';
 import ErrorTest from '../components/common/ErrorTest';
 import AdminRoute from './AdminRoute';
+import ProtectedRoute from './ProtectedRoute';
 
 // Auth pages
 import Login from '../pages/Login';
@@ -40,7 +41,11 @@ const AppRouter = () => {
               <Route index element={<Home />} />
               <Route path="explore" element={<Explore />} />
               <Route path="campaign/:id" element={<CampaignDetails />} />
-              <Route path="create" element={<CreateCampaign />} />
+              <Route path="create" element={
+                <ProtectedRoute>
+                  <CreateCampaign />
+                </ProtectedRoute>
+              } />
               <Route path="test-error" element={<ErrorTest />} />
             </Route>
 
@@ -51,7 +56,11 @@ const AppRouter = () => {
             <Route path="verify-email/:token" element={<VerifyEmailPage />} />
 
             {/* App pages */}
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
             <Route path="admin" element={
               <AdminRoute>
                 <Admin />
