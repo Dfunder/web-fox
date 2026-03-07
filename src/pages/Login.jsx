@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Button } from "../components/common/button";
 import Input from "../components/common/input";
@@ -11,6 +11,7 @@ import { loginUser } from "../features/auth/authThunks";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("········");
@@ -30,7 +31,10 @@ const Login = () => {
       const result = await dispatch(loginUser({ email, password }));
 
       if (result.payload) {
-        navigate("/dashboard");
+        // Check for redirect query parameter
+        const redirectParam = searchParams.get('redirect');
+        const redirectPath = redirectParam ? decodeURIComponent(redirectParam) : '/dashboard';
+        navigate(redirectPath);
       } else if (result.payload?.message) {
         setError(result.payload.message);
       } else {
@@ -41,7 +45,7 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  }, [email, password, dispatch, navigate]);
+  }, [email, password, dispatch, navigate, searchParams]);
 
   return (
     <div className="min-h-screen w-154 sm:w-auto bg-linear-to-br from-blue-100 via-sky-100 to-blue-50 flex items-center justify-center p-4 sm:p-6">
