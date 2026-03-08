@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --color-navy: #0F172A;
+  --color-light-bg: #F8FAFC;
+}
+
+
 /* Custom animations for Modal component */
 @keyframes fade-in {
   0% { opacity: 0; }
