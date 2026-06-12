@@ -36,7 +36,7 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-linear-to-br from-blue-100 via-sky-100 to-blue-50 flex items-center justify-center p-4 sm:p-6">
-      <div 
+      <div
         className="animate-fade-up"
         style={{
           background: "#fff",
@@ -44,48 +44,81 @@ const ForgotPasswordPage = () => {
           padding: "40px 32px",
           width: "100%",
           maxWidth: "420px",
-          boxShadow: "0 10px 45px rgba(30,58,138,0.08), 0 1px 3px rgba(0,0,0,0.02)",
+          boxShadow:
+            "0 10px 45px rgba(30,58,138,0.08), 0 1px 3px rgba(0,0,0,0.02)",
           display: "flex",
           flexDirection: "column",
           gap: "24px",
         }}
       >
         {/* Logo Section */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-          <div style={{
-            width: "48px", height: "48px",
-            background: "linear-gradient(135deg, #1e3a8a, #1d4ed8)",
-            borderRadius: "12px",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 4px 14px rgba(30,58,138,0.25)",
-          }}>
-            <span style={{ color: "#fff", fontWeight: "700", fontSize: "20px" }}>S</span>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "12px",
+          }}
+        >
+          <div
+            style={{
+              width: "48px",
+              height: "48px",
+              background: "linear-gradient(135deg, #1e3a8a, #1d4ed8)",
+              borderRadius: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 14px rgba(30,58,138,0.25)",
+            }}
+          >
+            <span
+              style={{ color: "#fff", fontWeight: "700", fontSize: "20px" }}
+            >
+              S
+            </span>
           </div>
-          <span style={{ fontSize: "18px", fontWeight: "700", color: "#1e293b", letterSpacing: "-0.02em" }}>
+          <span
+            style={{
+              fontSize: "18px",
+              fontWeight: "700",
+              color: "#1e293b",
+              letterSpacing: "-0.02em",
+            }}
+          >
             StellarAid
           </span>
         </div>
 
         {/* Content Section */}
         <div style={{ textAlign: "center" }}>
-          <h1 style={{
-            margin: "0 0 8px",
-            fontSize: "26px",
-            fontWeight: "800",
-            color: "#0f172a",
-            letterSpacing: "-0.03em",
-          }}>
+          <h1
+            style={{
+              margin: "0 0 8px",
+              fontSize: "26px",
+              fontWeight: "800",
+              color: "#0f172a",
+              letterSpacing: "-0.03em",
+            }}
+          >
             Forgot Password
           </h1>
-          <p style={{ margin: 0, fontSize: "14px", color: "#64748b", lineHeight: "1.5" }}>
-            {submitted 
-              ? "We've sent a recovery link to your email." 
+          <p
+            style={{
+              margin: 0,
+              fontSize: "14px",
+              color: "#64748b",
+              lineHeight: "1.5",
+            }}
+          >
+            {submitted
+              ? "We've sent a recovery link to your email."
               : "Enter the email address associated with your account and we'll send you a link to reset your password."}
           </p>
         </div>
 
         {submitted ? (
-          <div 
+          <div
             className="animate-fade-in"
             style={{
               padding: "24px",
@@ -95,17 +128,36 @@ const ForgotPasswordPage = () => {
               textAlign: "center",
             }}
           >
-            <div style={{ 
-              color: "#166534", 
-              fontSize: "14.5px", 
-              lineHeight: "1.6",
-              fontWeight: "500"
-            }}>
-              <p style={{ margin: "0 0 16px", fontSize: "16px", fontWeight: "700" }}>Check your inbox</p>
-              <p style={{ margin: 0 }}>If this email matches an account in our system, you will receive a reset link shortly.</p>
+            <div
+              style={{
+                color: "#166534",
+                fontSize: "14.5px",
+                lineHeight: "1.6",
+                fontWeight: "500",
+              }}
+            >
+              <p
+                style={{
+                  margin: "0 0 16px",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                Check your inbox
+              </p>
+              <p style={{ margin: 0 }}>
+                If this email matches an account in our system, you will receive
+                a reset link shortly.
+              </p>
             </div>
-            
-            <div style={{ marginTop: "24px", borderTop: "1px solid #dcfce7", paddingTop: "16px" }}>
+
+            <div
+              style={{
+                marginTop: "24px",
+                borderTop: "1px solid #dcfce7",
+                paddingTop: "16px",
+              }}
+            >
               <Link
                 to="/login"
                 style={{
@@ -116,7 +168,7 @@ const ForgotPasswordPage = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "6px"
+                  gap: "6px",
                 }}
               >
                 <HiArrowLeft size={16} />
@@ -125,7 +177,10 @@ const ForgotPasswordPage = () => {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+          >
             <Input
               label="Email Address"
               id="email"
@@ -137,30 +192,30 @@ const ForgotPasswordPage = () => {
               required
             />
 
-            <Button 
-              variant="primary" 
-              type="submit" 
-              loading={loading} 
+            <Button
+              variant="primary"
+              type="submit"
+              loading={loading}
               disabled={submitted || !email}
             >
               {loading ? "Processing..." : "Send Reset Link"}
             </Button>
 
             <div style={{ textAlign: "center", marginTop: "4px" }}>
-              <Link 
-                to="/login" 
-                style={{ 
-                  color: "#64748b", 
-                  textDecoration: "none", 
+              <Link
+                to="/login"
+                style={{
+                  color: "#64748b",
+                  textDecoration: "none",
                   fontWeight: "600",
                   fontSize: "13.5px",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  transition: "color 0.2s"
+                  transition: "color 0.2s",
                 }}
-                onMouseEnter={(e) => e.target.style.color = "#1d4ed8"}
-                onMouseLeave={(e) => e.target.style.color = "#64748b"}
+                onMouseEnter={(e) => (e.target.style.color = "#1d4ed8")}
+                onMouseLeave={(e) => (e.target.style.color = "#64748b")}
               >
                 <HiArrowLeft size={14} />
                 Return to Sign In
