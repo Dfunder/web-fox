@@ -2,56 +2,58 @@ import React from 'react';
 
 const HeroSection = () => {
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-[#F0F5FA] py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto flex flex-col items-center">
         {/* Main Content */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Know that your donation is <br className="hidden sm:block" />
-            making a difference
+          <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-bold text-[#0F172A] mb-6 leading-[1.2] tracking-tight max-w-4xl mx-auto">
+            Know that your donation <br className="hidden sm:block" />
+            is making a difference
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-[#475569] mb-10 max-w-2xl mx-auto leading-relaxed">
             StellarAid uses blockchain transparency to prove every single project you fund, 
             complete with verification and real-time impact tracking.
           </p>
           
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+          <div className="flex flex-row gap-4 justify-center items-center">
+            <button className="bg-[#003087] hover:bg-[#002266] text-white font-semibold py-3 px-8 rounded-lg shadow-sm hover:shadow transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
               Donate Now
             </button>
-            <button className="bg-white hover:bg-gray-50 text-gray-900 font-semibold py-4 px-8 rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+            <button className="bg-[#F8FAFC]/80 hover:bg-[#F1F5F9] text-[#0F172A] font-semibold py-3 px-8 rounded-lg border border-[#D0DDEB] shadow-sm hover:shadow transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
               Learn More
             </button>
           </div>
         </div>
 
         {/* Statistics Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold text-blue-600 mb-2">
-              $2.4M
+        <div className="w-full max-w-3xl bg-white border border-[#E2EAF2] rounded-2xl p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.04)]">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-extrabold text-[#003087] tracking-tight mb-1">
+                $2.4M
+              </div>
+              <div className="text-slate-500 text-xs sm:text-sm font-medium">
+                Donated
+              </div>
             </div>
-            <div className="text-gray-600 text-lg font-medium">
-              Donated
+            
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-extrabold text-[#F57C00] tracking-tight mb-1">
+                12.5K
+              </div>
+              <div className="text-slate-500 text-xs sm:text-sm font-medium">
+                Projects
+              </div>
             </div>
-          </div>
-          
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold text-orange-500 mb-2">
-              12.5K
-            </div>
-            <div className="text-gray-600 text-lg font-medium">
-              Projects
-            </div>
-          </div>
-          
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold text-green-600 mb-2">
-              89K
-            </div>
-            <div className="text-gray-600 text-lg font-medium">
-              Donors
+            
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-extrabold text-[#00875A] tracking-tight mb-1">
+                89K
+              </div>
+              <div className="text-slate-500 text-xs sm:text-sm font-medium">
+                Donors
+              </div>
             </div>
           </div>
         </div>
@@ -61,3 +63,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
