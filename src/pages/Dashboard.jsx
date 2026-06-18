@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import DonationStatsWidget from '../components/dashboard/DonationStatsWidget';
+import CampaignStatsWidget from '../components/dashboard/CampaignStatsWidget';
 import UserProfileCard from '../components/dashboard/UserProfileCard';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchCurrentUser } from '../features/auth/authThunks';
@@ -41,7 +42,8 @@ const Dashboard = () => {
         <div className="lg:col-span-1">
           <UserProfileCard />
         </div>
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3 space-y-6">
+          <CampaignStatsWidget />
           <DonationStatsWidget />
         </div>
       </div>
