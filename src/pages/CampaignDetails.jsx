@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../store/hooks';
 import { selectCurrentUser } from '../features/auth/authSelectors';
 import { useState } from 'react';
+import { canEditCampaign } from '../utils/permissions';
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -19,8 +20,8 @@ const CampaignDetails = () => {
     // ... other campaign fields
   });
 
-  // Check if current user is the campaign owner
-  const isOwner = user && campaign?.ownerId === user.id;
+  // Check if current user is the campaign owner using safe helper
+  const isOwner = canEditCampaign(user, campaign);
 
   const handleEdit = () => {
     navigate(`/campaign/${id}/edit`);

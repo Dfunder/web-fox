@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectCurrentUser } from '../../features/auth/authSelectors';
+import { selectCurrentUser, selectAuthLoading } from '../../features/auth/authSelectors';
 import { logoutUser } from '../../features/auth/authThunks';
 import { toastSuccess } from '../../utils/toast';
 import { useRole } from '../../hooks/useRole';
@@ -25,7 +25,8 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector(selectCurrentUser);
-  const { isAdmin } = useRole();
+  const isAuthLoading = useAppSelector(selectAuthLoading);
+  const { isAdmin, isUser } = useRole();
 
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
@@ -349,7 +350,9 @@ export default function Navbar() {
 
           {/* Desktop auth */}
           <div className="sna-auth">
-            {user ? (
+            {isAuthLoading ? (
+              <div className="w-9 h-9 rounded-full bg-slate-100 animate-pulse" />
+            ) : user ? (
               <div className="sna-avatar-wrap" ref={avatarRef}>
                 <button
                   className="sna-avatar-btn"
@@ -370,7 +373,7 @@ export default function Navbar() {
                     {isAdmin && (
                       <Link to="/admin" role="menuitem" onClick={() => setAvatarOpen(false)}>Admin Panel</Link>
                     )}
-                    {!isAdmin && (
+                    {isUser && (
                       <Link to="/create" role="menuitem" onClick={() => setAvatarOpen(false)}>Create Campaign</Link>
                     )}
                     <Link to="/profile"   role="menuitem" onClick={() => setAvatarOpen(false)}>Profile</Link>
@@ -422,13 +425,18 @@ export default function Navbar() {
 
           <div className="sna-mobile-divider" />
 
-          {user ? (
+          {isAuthLoading ? (
+            <div className="space-y-3 py-2">
+              <div className="h-8 bg-slate-100 rounded animate-pulse w-full" />
+              <div className="h-8 bg-slate-100 rounded animate-pulse w-full" />
+            </div>
+          ) : user ? (
             <>
               <Link to="/dashboard" onClick={handleNavClick}>Dashboard</Link>
               {isAdmin && (
                 <Link to="/admin" onClick={handleNavClick}>Admin Panel</Link>
               )}
-              {!isAdmin && (
+              {isUser && (
                 <Link to="/create" onClick={handleNavClick}>Create Campaign</Link>
               )}
               <Link to="/profile"   onClick={handleNavClick}>Profile</Link>
