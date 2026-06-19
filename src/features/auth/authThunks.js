@@ -103,6 +103,24 @@ export const fetchCurrentUser = createAsyncThunk(
     }
 );
 
+export const uploadAvatar = createAsyncThunk(
+    'auth/uploadAvatar',
+    async (file, { rejectWithValue }) => {
+        try {
+            const formData = new FormData();
+            formData.append('avatar', file);
+            const response = await api.post('/users/me/avatar', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            toastSuccess('Profile picture updated');
+            return response.data;
+        } catch (err) {
+            toastError(err);
+            return rejectWithValue(err.response?.data || err.message);
+        }
+    }
+);
+
 export const resetPassword = createAsyncThunk(
     'auth/resetPassword',
     async ({ token, password }, { rejectWithValue }) => {
