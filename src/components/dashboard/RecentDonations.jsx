@@ -7,6 +7,7 @@ import {
   selectRecentDonations,
   selectDashboardLoading,
 } from '../../features/dashboard/dashboardSelectors';
+import { TableRowSkeleton } from './dashboardSkeletonParts';
 
 // ─── Status badge config ──────────────────────────────────────────────────────
 const STATUS_BADGE = {
@@ -25,19 +26,6 @@ function StatusBadge({ status }) {
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${cfg.className}`}>
       {cfg.label}
     </span>
-  );
-}
-
-// ─── Skeleton row ─────────────────────────────────────────────────────────────
-function SkeletonRow() {
-  return (
-    <tr className="animate-pulse">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <td key={i} className="px-4 py-3">
-          <div className="h-4 bg-slate-200 rounded w-3/4" />
-        </td>
-      ))}
-    </tr>
   );
 }
 
@@ -83,7 +71,7 @@ export default function RecentDonations() {
           <tbody className="divide-y divide-slate-100">
             {loading ? (
               // Skeleton rows while fetching
-              Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
+              Array.from({ length: 5 }).map((_, i) => <TableRowSkeleton key={i} />)
             ) : recent.length === 0 ? (
               // Empty state
               <tr>

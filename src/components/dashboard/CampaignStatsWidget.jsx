@@ -7,6 +7,7 @@ import {
   Clock,
   ArrowRight
 } from 'lucide-react';
+import { StatCardsGridSkeleton } from './dashboardSkeletonParts';
 
 /**
  * AnimatedCounter component to animate number totals
@@ -119,21 +120,11 @@ const CampaignStatsWidget = () => {
       </div>
       
       <div className="p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {loading ? (
-            // Skeleton Loader
-            Array.from({ length: 4 }).map((_, index) => (
-              <div key={index} className="flex items-center p-4 bg-slate-50 rounded-lg border border-slate-100 animate-pulse" data-testid="skeleton">
-                <div className="w-12 h-12 bg-slate-200 rounded-full flex-shrink-0 mr-4"></div>
-                <div className="flex-1">
-                  <div className="h-4 bg-slate-200 rounded w-2/3 mb-2"></div>
-                  <div className="h-6 bg-slate-200 rounded w-1/2"></div>
-                </div>
-              </div>
-            ))
-          ) : (
-            // Actual Stats
-            statItems.map((item, index) => (
+        {loading ? (
+          <StatCardsGridSkeleton />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {statItems.map((item, index) => (
               <div 
                 key={index} 
                 className="flex items-center p-4 bg-slate-50 hover:bg-slate-100 transition-colors rounded-lg border border-slate-100 group cursor-default"
@@ -148,9 +139,9 @@ const CampaignStatsWidget = () => {
                   </p>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

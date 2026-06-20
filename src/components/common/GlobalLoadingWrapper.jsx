@@ -1,14 +1,25 @@
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Spinner from './Spinner';
 
-const selectIsAnyLoading = (state) =>
-  state.auth.isLoading ||
-  state.campaigns.loading ||
-  state.donations.loading ||
-  state.dashboard.loading;
+const isDashboardRoute = (pathname) => pathname.startsWith('/dashboard');
 
 const GlobalLoadingWrapper = ({ children }) => {
-  const isReduxLoading = useSelector(selectIsAnyLoading);
+  const { pathname } = useLocation();
+  const onDashboard = isDashboardRoute(pathname);
+
+  const isReduxLoading = useSelector((state) => {
+    if (onDashboard) {
+      return state.campaigns.loading || state.donations.loading;
+    }
+
+    return (
+      state.auth.isLoading ||
+      state.campaigns.loading ||
+      state.donations.loading ||
+      state.dashboard.isLoading
+    );
+  });
 
   return (
     <>

@@ -23,9 +23,8 @@ describe('CampaignStatsWidget', () => {
       </MemoryRouter>
     );
 
-    // Wait for data to load (simulated with 1200ms in component)
     await waitFor(() => {
-      expect(screen.getByText('Campaign Overview')).toBeInTheDocument();
+      expect(screen.getByText('Total Campaigns')).toBeInTheDocument();
     }, { timeout: 3000 });
 
     expect(screen.getByText('Total Campaigns')).toBeInTheDocument();
