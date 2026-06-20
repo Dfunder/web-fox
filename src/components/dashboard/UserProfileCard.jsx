@@ -1,6 +1,7 @@
 import { User, Mail, Shield, Wallet } from 'lucide-react';
 import { useAppSelector } from '../../store/hooks';
 import { selectCurrentUser, selectAuthLoading } from '../../features/auth/authSelectors';
+import { ProfileSkeleton } from './dashboardSkeletonParts';
 
 const KYC_BADGE = {
   verified: { label: 'Verified', className: 'bg-emerald-100 text-emerald-700' },
@@ -18,19 +19,7 @@ export default function UserProfileCard() {
   const loading = useAppSelector(selectAuthLoading);
 
   if (loading) {
-    return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 animate-pulse">
-        <div className="h-5 bg-slate-200 rounded w-1/3 mb-5" />
-        <div className="space-y-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className="w-4 h-4 bg-slate-200 rounded flex-shrink-0" />
-              <div className="h-4 bg-slate-200 rounded w-3/4" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <ProfileSkeleton />;
   }
 
   const badge = KYC_BADGE[user?.kycStatus] ?? { label: 'Unverified', className: 'bg-slate-100 text-slate-500' };

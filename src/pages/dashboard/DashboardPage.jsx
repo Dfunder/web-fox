@@ -2,14 +2,16 @@ import { useEffect } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DonationStatsWidget from '../../components/dashboard/DonationStatsWidget';
+import DashboardSkeleton from '../../components/dashboard/DashboardSkeleton';
 import UserProfileCard from '../../components/dashboard/UserProfileCard';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchCurrentUser } from '../../features/auth/authThunks';
-import { selectCurrentUser } from '../../features/auth/authSelectors';
+import { selectAuthLoading, selectCurrentUser } from '../../features/auth/authSelectors';
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+  const loading = useAppSelector(selectAuthLoading);
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -37,14 +39,18 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-1">
-          <UserProfileCard />
+      {loading ? (
+        <DashboardSkeleton />
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-1">
+            <UserProfileCard />
+          </div>
+          <div className="lg:col-span-3">
+            <DonationStatsWidget />
+          </div>
         </div>
-        <div className="lg:col-span-3">
-          <DonationStatsWidget />
-        </div>
-      </div>
+      )}
     </div>
   );
 }
