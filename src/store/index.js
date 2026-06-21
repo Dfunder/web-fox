@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-
-// A simple placeholder reducer to fulfill the requirements until actual features are added
-const rootReducer = (state = {}) => {
-  return state;
-};
+import campaignReducer from '../features/campaigns/campaignSlice';
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    campaigns: campaignReducer,
+  },
   devTools: import.meta.env.NODE_ENV !== 'production',
 });

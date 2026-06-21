@@ -10,7 +10,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
 import CampaignDetails from '../pages/CampaignDetails';
-import CreateCampaign from '../pages/CreateCampaign';
+import CreateCampaignPage from '../pages/campaigns/CreateCampaignPage';
 import Admin from '../pages/Admin';
 import NotFound from '../pages/NotFound';
 
@@ -25,7 +25,8 @@ const AppRouter = () => {
           <Route path="register" element={<Register />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="campaign/:id" element={<CampaignDetails />} />
-          <Route path="create" element={<CreateCampaign />} />
+          <Route path="create" element={<CreateCampaignPage />} />
+          <Route path="campaigns/create" element={<CreateCampaignPage />} />
           <Route path="admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Route>
