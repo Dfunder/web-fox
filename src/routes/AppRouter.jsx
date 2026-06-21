@@ -26,6 +26,7 @@ const Admin = lazy(() => import('../pages/Admin'));
 // Dashboard sub-pages
 const DashboardPage    = lazy(() => import('../pages/dashboard/DashboardPage'));
 const MyCampaignsPage  = lazy(() => import('../pages/dashboard/MyCampaignsPage'));
+const MyBookmarksPage = lazy(() => import('../pages/dashboard/MyBookmarksPage'));
 const DonationsPage    = lazy(() => import('../pages/dashboard/DonationsPage'));
 const WalletPage       = lazy(() => import('../pages/dashboard/WalletPage'));
 const SettingsPage     = lazy(() => import('../pages/dashboard/SettingsPage'));
@@ -70,6 +71,7 @@ const AppRouter = () => {
             }>
               <Route index element={<DashboardPage />} />
               <Route path="campaigns" element={<MyCampaignsPage />} />
+              <Route path="bookmarks" element={<MyBookmarksPage />} />
               <Route path="donations" element={<DonationsPage />} />
               <Route path="wallet" element={<WalletPage />} />
               <Route path="settings" element={<SettingsPage />} />
