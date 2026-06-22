@@ -6,7 +6,7 @@ import * as yup from "yup";
 import {
   selectDraftCampaign,
   updateDraftCampaign,
-} from "../../../../features/campaigns/campaignsSlice";
+} from "../../../features/campaigns/campaignsSlice";
 
 const CATEGORIES = [
   "Education",
@@ -45,9 +45,10 @@ const BasicInfoStep = ({ validationRef }) => {
       mode: "onChange",
     });
 
-  // Keep local form values in sync if draft changes externally
+  // Keep local form values in sync if draft changes externally (e.g., from Redux store updates)
   useEffect(() => {
     setValue("title", draft.title || "");
+
     setValue("category", draft.category || "");
     setValue("shortDescription", draft.description || "");
     setValue("fullStory", draft.fullStory || draft.description || "");
