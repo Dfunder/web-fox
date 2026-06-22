@@ -27,8 +27,10 @@ const AnimatedCounter = ({ value, duration = 1000 }) => {
       : value;
     
     if (isNaN(target)) {
-      setCount(value);
-      return;
+      // Non-numeric values are shown as-is. Defer the state update to the next
+      // frame so we don't call setState synchronously inside the effect body.
+      const rafId = window.requestAnimationFrame(() => setCount(value));
+      return () => window.cancelAnimationFrame(rafId);
     }
 
     let startTimestamp = null;
