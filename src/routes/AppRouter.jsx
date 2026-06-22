@@ -20,7 +20,7 @@ import VerifyEmailPage from '../pages/auth/VerifyEmailPage';
 const Home = lazy(() => import('../pages/Home'));
 const Explore = lazy(() => import('../pages/Explore'));
 const CampaignDetails = lazy(() => import('../pages/CampaignDetails'));
-const CreateCampaign = lazy(() => import('../pages/CreateCampaign'));
+const CreateCampaignPage = lazy(() => import('../pages/campaigns/CreateCampaignPage'));
 const Admin = lazy(() => import('../pages/Admin'));
 
 // Dashboard sub-pages
@@ -50,7 +50,12 @@ const AppRouter = () => {
               <Route path="campaign/:id" element={<CampaignDetails />} />
               <Route path="create" element={
                 <ProtectedRoute>
-                  <CreateCampaign />
+                  <CreateCampaignPage />
+                </ProtectedRoute>
+              } />
+              <Route path="campaigns/create" element={
+                <ProtectedRoute>
+                  <CreateCampaignPage />
                 </ProtectedRoute>
               } />
               <Route path="test-error" element={<ErrorTest />} />
