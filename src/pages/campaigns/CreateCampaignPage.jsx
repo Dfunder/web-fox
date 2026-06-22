@@ -8,7 +8,7 @@ import {
   resetCampaignForm,
   selectDraftCampaign,
   selectFormStep,
-} from '../../features/campaigns/campaignSlice';
+} from '../../features/campaigns/campaignsSlice';
 import DetailsStep from './steps/DetailsStep';
 import FundingStep from './steps/FundingStep';
 import MediaStep from './steps/MediaStep';

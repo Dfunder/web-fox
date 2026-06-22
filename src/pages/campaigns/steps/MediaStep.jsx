@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectDraftCampaign, updateDraftCampaign } from '../../../features/campaigns/campaignSlice';
+import { selectDraftCampaign, updateDraftCampaign } from '../../../features/campaigns/campaignsSlice';
 
 const MediaStep = () => {
   const dispatch = useDispatch();

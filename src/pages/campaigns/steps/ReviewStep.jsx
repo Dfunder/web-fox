@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectDraftCampaign } from '../../../features/campaigns/campaignSlice';
+import { selectDraftCampaign } from '../../../features/campaigns/campaignsSlice';
 
 const FIELDS = [
   { key: 'title', label: 'Title' },

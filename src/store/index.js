@@ -1,9 +1,27 @@
-import { configureStore } from '@reduxjs/toolkit';
-import campaignReducer from '../features/campaigns/campaignSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import rootReducer from "./rootReducer";
 
 export const store = configureStore({
-  reducer: {
-    campaigns: campaignReducer,
-  },
-  devTools: import.meta.env.NODE_ENV !== 'production',
+  reducer: rootReducer,
+  devTools: import.meta.env.MODE !== "production",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // redux-persist dispatches these actions internally — without ignoring
+        // then RTK would throw serialization warnings in the console
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
+
+// persistor is exported so PersistGate in main.jsx can use it
+export const persistor = persistStore(store);
