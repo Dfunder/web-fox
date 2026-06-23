@@ -1,12 +1,14 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../components/common/button";
 import Input from "../components/common/input";
 import PasswordInput from "../components/common/passwordInput";
 import { FcGoogle } from "react-icons/fc";
 import { SiStellar } from "react-icons/si";
 import { loginUser } from "../features/auth/authThunks";
+import { clearAuthError } from "../features/auth/authSlice";
+import { selectAuthError, selectAuthLoading } from "../features/auth/authSelectors";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,36 +17,40 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("········");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const loading = useSelector(selectAuthLoading);
+  const reduxError = useSelector(selectAuthError);
+
+  // Clear Redux error whenever the user starts typing
+  const handleEmailChange = useCallback((e) => {
+    setEmail(e.target.value);
+    if (reduxError) dispatch(clearAuthError());
+  }, [reduxError, dispatch]);
+
+  const handlePasswordChange = useCallback((e) => {
+    setPassword(e.target.value);
+    if (reduxError) dispatch(clearAuthError());
+  }, [reduxError, dispatch]);
+
+  // Clear error on unmount so stale errors don't bleed into other pages
+  useEffect(() => {
+    return () => { dispatch(clearAuthError()); };
+  }, [dispatch]);
 
   const handleSubmit = useCallback(async () => {
     if (!email || password === "········") {
-      setError("Please enter your email and password");
+      dispatch({ type: 'auth/setAuthError', payload: 'Please enter your email and password' });
       return;
     }
 
-    setError(null);
-    setLoading(true);
+    const result = await dispatch(loginUser({ email, password }));
 
-    try {
-      const result = await dispatch(loginUser({ email, password }));
-
-      if (result.payload) {
-        // Check for redirect query parameter
-        const redirectParam = searchParams.get('redirect');
-        const redirectPath = redirectParam ? decodeURIComponent(redirectParam) : '/dashboard';
-        navigate(redirectPath);
-      } else if (result.payload?.message) {
-        setError(result.payload.message);
-      } else {
-        setError("Login failed. Please try again.");
-      }
-    } catch {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
+    if (loginUser.fulfilled.match(result)) {
+      const redirectParam = searchParams.get('redirect');
+      const redirectPath = redirectParam ? decodeURIComponent(redirectParam) : '/dashboard';
+      navigate(redirectPath);
     }
+    // On rejection, the error is already in Redux state via extraReducers
   }, [email, password, dispatch, navigate, searchParams]);
 
   return (
@@ -124,8 +130,9 @@ const Login = () => {
         </div>
 
         {/* Error Message */}
-        {error && (
+        {reduxError && (
           <div
+            role="alert"
             style={{
               background: "#fee2e2",
               border: "1px solid #fecaca",
@@ -135,7 +142,7 @@ const Login = () => {
               color: "#dc2626",
             }}
           >
-            {error}
+            {reduxError}
           </div>
         )}
 
@@ -146,7 +153,7 @@ const Login = () => {
           type="email"
           placeholder="you@example.com"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
           autoComplete="email"
         />
 
@@ -155,7 +162,7 @@ const Login = () => {
           label="Password"
           id="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
           showStrength={false}
           autoComplete="current-password"
         />

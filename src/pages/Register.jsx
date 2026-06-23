@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { Button } from "../components/common/button";
 import Input from "../components/common/input";
@@ -11,13 +11,18 @@ import { SiStellar } from "react-icons/si";
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../features/auth/authThunks';
 import { registerSchema } from '../features/auth/authValidation';
+import { clearAuthError } from '../features/auth/authSlice';
+import { selectAuthError, selectAuthFieldErrors } from '../features/auth/authSelectors';
 
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const reduxError = useSelector(selectAuthError);
+  const fieldErrors = useSelector(selectAuthFieldErrors);
 
   const {
     control,
@@ -34,17 +39,31 @@ const Register = () => {
     },
   });
 
+  // Clear Redux errors on unmount so stale errors don't persist
+  useEffect(() => {
+    return () => { dispatch(clearAuthError()); };
+  }, [dispatch]);
+
   const handleCreate = useCallback(
     async (data) => {
-      try {
-        await dispatch(registerUser(data)).unwrap();
+      const result = await dispatch(registerUser(data));
+      if (registerUser.fulfilled.match(result)) {
         navigate('/login');
-      } catch (err) {
-        // toast already shown by thunk
-        console.log(err)
       }
+      // On rejection, error/fieldErrors are set in Redux state via extraReducers
     },
     [dispatch, navigate]
+  );
+
+  // Clear Redux errors when the user starts typing in any field
+  const handleFieldChange = useCallback(
+    (originalOnChange) => (e) => {
+      if (reduxError || Object.keys(fieldErrors).length > 0) {
+        dispatch(clearAuthError());
+      }
+      originalOnChange(e);
+    },
+    [reduxError, fieldErrors, dispatch]
   );
 
   return (
@@ -111,6 +130,7 @@ const Register = () => {
             render={({ field }) => (
               <Input
                 {...field}
+                onChange={handleFieldChange(field.onChange)}
                 label="Email Address"
                 id="email"
                 type="email"
@@ -119,8 +139,11 @@ const Register = () => {
               />
             )}
           />
-          {errors.email && (
-            <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+          {/* Show yup validation error OR backend field error for email */}
+          {(errors.email || fieldErrors.email) && (
+            <p className="text-red-500 text-xs mt-1">
+              {fieldErrors.email || errors.email?.message}
+            </p>
           )}
 
           {/* Role selection */}
@@ -140,7 +163,7 @@ const Register = () => {
                   value="donor"
                   label="Support projects (Donor)"
                   checked={field.value === "donor"}
-                  onChange={() => field.onChange("donor")}
+                  onChange={() => { handleFieldChange(() => field.onChange("donor"))(); }}
                 />
                 <RadioOption
                   id="creator"
@@ -148,7 +171,7 @@ const Register = () => {
                   value="creator"
                   label="Create a campaign (Creator)"
                   checked={field.value === "creator"}
-                  onChange={() => field.onChange("creator")}
+                  onChange={() => { handleFieldChange(() => field.onChange("creator"))(); }}
                 />
               </div>
             )}
@@ -164,6 +187,7 @@ const Register = () => {
             render={({ field }) => (
               <PasswordInput
                 {...field}
+                onChange={handleFieldChange(field.onChange)}
                 label="Password"
                 id="password"
                 showStrength={true}
@@ -182,6 +206,7 @@ const Register = () => {
             render={({ field }) => (
               <PasswordInput
                 {...field}
+                onChange={handleFieldChange(field.onChange)}
                 label="Confirm Password"
                 id="confirm-password"
                 autoComplete="new-password"
@@ -190,6 +215,23 @@ const Register = () => {
           />
           {errors.confirmPassword && (
             <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
+          )}
+
+          {/* General backend error alert — shown above the submit button */}
+          {reduxError && (
+            <div
+              role="alert"
+              style={{
+                background: "#fee2e2",
+                border: "1px solid #fecaca",
+                borderRadius: "8px",
+                padding: "10px 12px",
+                fontSize: "13px",
+                color: "#dc2626",
+              }}
+            >
+              {reduxError}
+            </div>
           )}
 
           {/* Primary CTA */}
