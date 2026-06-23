@@ -2,6 +2,42 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../services/api';
 import { toastSuccess, toastError } from '../../utils/toast';
 
+const parseAuthError = (err) => {
+    const data = err.response?.data;
+    const code = data?.code || data?.error;
+    const serverMessage = data?.message || (typeof data === 'string' ? data : null);
+
+    const codeMap = {
+        EMAIL_NOT_VERIFIED: {
+            message: 'Please verify your email before signing in. Check your inbox for a verification link.',
+        },
+        INVALID_CREDENTIALS: {
+            message: 'Incorrect email or password. Please try again.',
+        },
+        EMAIL_TAKEN: {
+            message: 'This email is already taken. Try signing in instead.',
+            field: 'email',
+        },
+        USER_NOT_FOUND: {
+            message: 'No account found with that email address.',
+            field: 'email',
+        },
+        INVALID_TOKEN: {
+            message: 'This link is invalid or has expired. Please request a new one.',
+        },
+        TOKEN_EXPIRED: {
+            message: 'This link has expired. Please request a new one.',
+        },
+    };
+
+    if (code && codeMap[code]) {
+        return codeMap[code];
+    }
+
+    // Fall back to whatever message the server sent
+    return { message: serverMessage || 'Something went wrong. Please try again.' };
+};
+
 export const registerUser = createAsyncThunk(
     'auth/register',
     async (userData, { rejectWithValue }) => {
@@ -11,8 +47,8 @@ export const registerUser = createAsyncThunk(
             // return response.data;
             return { status: 'success', message: 'Registration successful' };
         } catch (err) {
-            toastError(err);
-            return rejectWithValue(err.response?.data || err.message);
+            const parsed = parseAuthError(err);
+            return rejectWithValue(parsed);
         }
     }
 );
@@ -25,8 +61,8 @@ export const loginUser = createAsyncThunk(
             toastSuccess('Logged in successfully');
             return response.data;
         } catch (err) {
-            toastError(err);
-            return rejectWithValue(err.response?.data || err.message);
+            const parsed = parseAuthError(err);
+            return rejectWithValue(parsed);
         }
     }
 );
