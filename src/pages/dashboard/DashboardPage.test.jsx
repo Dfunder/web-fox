@@ -5,6 +5,20 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import DashboardPage from './DashboardPage';
 
+const initialDashboardState = {
+  stats: null,
+  recentDonations: [],
+  recentCampaigns: [],
+  isLoading: false,
+  error: null,
+  lastFetched: { stats: null, donations: null, campaigns: null },
+};
+
+// The DashboardPage's slice isn't wired up in this minimal store; returning
+// the default state keeps the placeholder reducer behavior compatible with
+// production with no need for a full mock of the thunk machinery.
+const dashboardStubReducer = () => initialDashboardState;
+
 const createStore = (authOverrides = {}) => configureStore({
   reducer: {
     auth: () => ({
@@ -13,6 +27,7 @@ const createStore = (authOverrides = {}) => configureStore({
       isAuthenticated: true,
       ...authOverrides,
     }),
+    dashboard: dashboardStubReducer,
   },
 });
 
