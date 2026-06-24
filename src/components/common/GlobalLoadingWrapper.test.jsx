@@ -8,7 +8,7 @@ import GlobalLoadingWrapper from './GlobalLoadingWrapper';
 const createStore = (overrides = {}) => configureStore({
   reducer: {
     auth: () => ({ isLoading: false, ...overrides.auth }),
-    campaigns: () => ({ loading: false, ...overrides.campaigns }),
+    campaigns: () => ({ isLoading: false, ...overrides.campaigns }),
     donations: () => ({ loading: false, ...overrides.donations }),
     dashboard: () => ({ isLoading: false, ...overrides.dashboard }),
   },

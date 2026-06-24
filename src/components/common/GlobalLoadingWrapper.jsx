@@ -10,12 +10,12 @@ const GlobalLoadingWrapper = ({ children }) => {
 
   const isReduxLoading = useSelector((state) => {
     if (onDashboard) {
-      return state.campaigns.loading || state.donations.loading;
+      return state.campaigns.isLoading || state.donations.loading;
     }
 
     return (
       state.auth.isLoading ||
-      state.campaigns.loading ||
+      state.campaigns.isLoading ||
       state.donations.loading ||
       state.dashboard.isLoading
     );

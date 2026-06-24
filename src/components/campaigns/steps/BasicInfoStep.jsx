@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {
   selectDraftCampaign,
-  updateDraftCampaign,
+  updateDraft,
 } from "../../../features/campaigns/campaignsSlice";
 
 const CATEGORIES = [
@@ -61,7 +61,7 @@ const BasicInfoStep = ({ validationRef }) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       dispatch(
-        updateDraftCampaign({
+        updateDraft({
           title: watched.title || "",
           category: watched.category || "",
           description: watched.shortDescription || "",
@@ -82,7 +82,7 @@ const BasicInfoStep = ({ validationRef }) => {
           // ensure final save before proceeding
           const values = await handleSubmit((vals) => vals)();
           dispatch(
-            updateDraftCampaign({
+            updateDraft({
               title: values.title,
               category: values.category,
               description: values.shortDescription,
