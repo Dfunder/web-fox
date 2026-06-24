@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectDraftCampaign, updateDraftCampaign } from '../../../features/campaigns/campaignsSlice';
+import { selectDraftCampaign, updateDraft } from '../../../features/campaigns/campaignsSlice';
 
 const MediaStep = () => {
   const dispatch = useDispatch();
   const draft = useSelector(selectDraftCampaign);
 
   const handleChange = (field) => (event) => {
-    dispatch(updateDraftCampaign({ [field]: event.target.value }));
+    dispatch(updateDraft({ [field]: event.target.value }));
   };
 
   return (

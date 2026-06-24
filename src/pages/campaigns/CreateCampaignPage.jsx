@@ -5,10 +5,11 @@ import {
   CAMPAIGN_STEPS,
   nextStep,
   prevStep,
-  resetCampaignForm,
+  clearDraft,
   selectDraftCampaign,
   selectFormStep,
 } from "../../features/campaigns/campaignsSlice";
+import { submitCampaign } from "../../features/campaigns/campaignsThunks";
 import BasicInfoStep from "../../components/campaigns/steps/BasicInfoStep";
 import FundingStep from "./steps/FundingStep";
 import MediaStep from "./steps/MediaStep";
@@ -44,9 +45,10 @@ const CreateCampaignPage = () => {
     ),
   );
 
-  const isFirstStep = formStep === 0;
-  const isLastStep = formStep === CAMPAIGN_STEPS.length - 1;
-  const { title, Component } = STEP_META[formStep];
+  // formStep is 1-indexed: 1 == first step, CAMPAIGN_STEPS.length == last.
+  const isFirstStep = formStep === 1;
+  const isLastStep = formStep === CAMPAIGN_STEPS.length;
+  const { title, Component } = STEP_META[formStep - 1];
 
   const validationRef = useRef(null);
 
@@ -65,9 +67,13 @@ const CreateCampaignPage = () => {
   const handleBack = () => dispatch(prevStep());
 
   const handleSubmit = () => {
-    // Placeholder submit; integrates with campaign service in a later issue.
-    console.log("Submitting campaign draft:", draft);
-    dispatch(resetCampaignForm());
+    // Submit the draft for review. The slice clears draftCampaign and
+    // resets formStep on fulfillment (see submitCampaign.extraReducers).
+    dispatch(submitCampaign(draft));
+  };
+
+  const handleCancel = () => {
+    dispatch(clearDraft());
   };
 
   return (
@@ -80,8 +86,9 @@ const CreateCampaignPage = () => {
       {/* Step progress indicator */}
       <ol className="flex items-center gap-2">
         {STEP_META.map((step, index) => {
-          const isComplete = index < formStep;
-          const isCurrent = index === formStep;
+          const stepNumber = index + 1;
+          const isComplete = stepNumber < formStep;
+          const isCurrent = stepNumber === formStep;
           return (
             <li key={step.id} className="flex flex-1 items-center gap-2">
               <span
@@ -94,7 +101,7 @@ const CreateCampaignPage = () => {
                       : "bg-slate-200 text-slate-500",
                 ].join(" ")}
               >
-                {isComplete ? "✓" : index + 1}
+                {isComplete ? "✓" : stepNumber}
               </span>
               {index < STEP_META.length - 1 && (
                 <span
@@ -110,20 +117,31 @@ const CreateCampaignPage = () => {
 
       <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-primary">
-          Step {formStep + 1}: {title}
+          Step {formStep}: {title}
         </h2>
         <Component validationRef={validationRef} />
       </div>
 
       <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={handleBack}
-          disabled={isFirstStep}
-          className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Back
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleBack}
+            disabled={isFirstStep}
+            className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Back
+          </button>
+          {isDirty && (
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100"
+            >
+              Discard draft
+            </button>
+          )}
+        </div>
 
         {isLastStep ? (
           <button
