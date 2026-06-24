@@ -9,6 +9,7 @@ import {
   selectDraftCampaign,
   selectFormStep,
 } from "../../features/campaigns/campaignsSlice";
+import { invalidateDashboardCache } from "../../features/dashboard/dashboardSlice";
 import BasicInfoStep from "../../components/campaigns/steps/BasicInfoStep";
 import FundingStep from "./steps/FundingStep";
 import MediaStep from "./steps/MediaStep";
@@ -68,6 +69,11 @@ const CreateCampaignPage = () => {
     // Placeholder submit; integrates with campaign service in a later issue.
     console.log("Submitting campaign draft:", draft);
     dispatch(resetCampaignForm());
+    // A new campaign appears on the dashboard's "Recent Campaigns" list and
+    // is reflected in summary stats, so invalidate those caches so the next
+    // dashboard load fetches fresh data.
+    dispatch(invalidateDashboardCache("campaigns"));
+    dispatch(invalidateDashboardCache("stats"));
   };
 
   return (
